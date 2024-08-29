@@ -1,0 +1,70 @@
+// ignore_for_file: public_member_api_docs
+
+import 'package:kuwot_api/core/network/network.dart';
+import 'package:kuwot_api/data/data_sources/local/quote_local_data_source.dart';
+import 'package:kuwot_api/data/data_sources/remote/translate_remote_data_source.dart';
+import 'package:kuwot_api/data/data_sources/remote/unsplash_remote_data_source.dart';
+import 'package:kuwot_api/data/quote_database.dart';
+import 'package:kuwot_api/data/repositories/image_repository_impl.dart';
+import 'package:kuwot_api/data/repositories/quote_repository_impl.dart';
+import 'package:kuwot_api/domain/repositories/image_repository.dart';
+import 'package:kuwot_api/domain/repositories/quote_repository.dart';
+
+/// A container for dependency injection.
+/// Mainly contains the instances of the data sources and repositories
+/// in singletons.
+class InjectionContainer {
+  factory InjectionContainer() {
+    return _instance;
+  }
+
+  InjectionContainer._internal();
+  static final InjectionContainer _instance = InjectionContainer._internal();
+
+  Network? _network;
+  QuoteDb? _quoteDatabase;
+  QuoteLocalDataSource? _quoteLocalDataSource;
+  TranslateRemoteDataSource? _translateRemoteDataSource;
+  QuoteRepository? _quoteRepository;
+  ImageRepository? _imageRepository;
+
+  /// [Network] instance, used for network operations.
+  Network get network => _network ??= NetworkImpl();
+
+  /// [QuoteDb] instance, interacts with the quote SQLite database.
+  QuoteDb get quoteDatabase => _quoteDatabase ??= QuoteDb();
+
+  /// [QuoteLocalDataSource] instance,
+  /// accessing the local SQLite database for quotes.
+  QuoteLocalDataSource get quoteLocalDataSource {
+    quoteDatabase.initialize();
+    return _quoteLocalDataSource ??= QuoteLocalDataSourceImpl(
+      sqliteDb: quoteDatabase,
+    );
+  }
+
+  /// [TranslateRemoteDataSource] instance, accessing the translation API.
+  TranslateRemoteDataSource get translateRemoteDataSource =>
+      _translateRemoteDataSource ??= TranslateRemoteDataSourceImpl(
+        network: network,
+      );
+
+  /// [QuoteRepository] instance, combining [QuoteLocalDataSource] and
+  /// [TranslateRemoteDataSource] for quotes.
+  QuoteRepository get quoteRepository {
+    final quoteDataCount = quoteLocalDataSource.getQuoteCount();
+    return _quoteRepository ??= QuoteRepositoryImpl(
+      quoteDataCount: quoteDataCount,
+      quoteDataSource: quoteLocalDataSource,
+      translateDataSource: translateRemoteDataSource,
+    );
+  }
+
+  /// [ImageRepository] instance using [UnsplashRemoteDataSource].
+  ImageRepository get imageRepository =>
+      _imageRepository ??= ImageRepositoryImpl(
+        unsplashDataSource: UnsplashRemoteDataSourceImpl(
+          network: network,
+        ),
+      );
+}

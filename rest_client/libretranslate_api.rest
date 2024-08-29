@@ -1,0 +1,11 @@
+@baseUrl = https://translate.dhemasnurjaya.com
+
+### translate text  
+POST  {{baseUrl}}/translate HTTP/1.1
+Content-Type: application/json
+
+{
+    "q": "Hello, World!",
+    "source": "auto",
+    "target": "id"
+}
