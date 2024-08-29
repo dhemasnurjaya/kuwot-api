@@ -29,7 +29,7 @@ void main() {
           .thenAnswer((_) async => response);
 
       // act
-      final result = await dataSource.getRandomImage();
+      final result = await dataSource.getRandomImages();
 
       // assert
       expect(result, isA<List<UnsplashImageModel>>());
@@ -42,7 +42,7 @@ void main() {
           .thenThrow(Exception());
 
       // act
-      final call = dataSource.getRandomImage;
+      final call = dataSource.getRandomImages;
 
       // assert
       expect(call(), throwsException);

@@ -14,7 +14,7 @@ class ImageRepositoryImpl implements ImageRepository {
 
   @override
   Future<List<Image>> getRandomImages({int count = 20}) async {
-    final models = await unsplashDataSource.getRandomImage(count: count);
+    final models = await unsplashDataSource.getRandomImages(count: count);
     return models.map(Image.fromModel).toList();
   }
 }

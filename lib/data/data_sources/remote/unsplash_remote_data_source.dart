@@ -8,7 +8,7 @@ import 'package:kuwot_api/env.dart';
 /// A contract for remote data sources of Unsplash.
 abstract class UnsplashRemoteDataSource {
   /// Get a random image.
-  Future<List<UnsplashImageModel>> getRandomImage({int count = 10});
+  Future<List<UnsplashImageModel>> getRandomImages({int count = 10});
 }
 
 /// An implementation of [UnsplashRemoteDataSource].
@@ -21,7 +21,7 @@ class UnsplashRemoteDataSourceImpl implements UnsplashRemoteDataSource {
   final Network _network;
 
   @override
-  Future<List<UnsplashImageModel>> getRandomImage({int count = 10}) async {
+  Future<List<UnsplashImageModel>> getRandomImages({int count = 10}) async {
     final uri = Uri(
       scheme: 'https',
       host: unsplashApiHost,
