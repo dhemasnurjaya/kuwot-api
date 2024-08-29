@@ -48,15 +48,15 @@ void main() {
         ),
       );
 
-      when(() => mockUnsplashDataSource.getRandomImage())
+      when(() => mockUnsplashDataSource.getRandomImages())
           .thenAnswer((_) async => [tImageModel]);
 
       // act
-      final result = await mockUnsplashDataSource.getRandomImage();
+      final result = await mockUnsplashDataSource.getRandomImages();
 
       // assert
       expect(result, [tImageModel]);
-      verify(() => mockUnsplashDataSource.getRandomImage()).called(1);
+      verify(() => mockUnsplashDataSource.getRandomImages()).called(1);
     });
   });
 }
