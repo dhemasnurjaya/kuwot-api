@@ -1,0 +1,35 @@
+config:
+  target: http://localhost:8080
+  phases:
+    - duration: 60
+      arrivalRate: 1
+      rampTo: 5
+      name: Warm up the API
+    - duration: 60
+      arrivalRate: 10
+      rampTo: 50
+      name: Ramp up to peak load
+    - duration: 300
+      arrivalRate: 50
+      name: Sustained peak load
+  # Load & configure a couple of useful plugins
+  # https://docs.art/reference/extensions
+  plugins:
+    ensure: {}
+    apdex: {}
+    metrics-by-endpoint: {}
+  apdex:
+    threshold: 100
+  ensure:
+    thresholds:
+      - http.response_time.p99: 150
+      - http.response_time.p95: 100
+scenarios:
+  - name: Get random quote
+    flow:
+      - loop:
+          - get:
+              url: '/quotes'
+          # - get:
+          #     url: '/quotes/{{$randomNumber(1,200000)}}'
+        count: 100
