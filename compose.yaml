@@ -1,0 +1,7 @@
+services:
+  server:
+    build:
+      context: .
+    container_name: server
+    ports:
+      - 3000:8080
