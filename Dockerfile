@@ -31,10 +31,12 @@ WORKDIR /app
 # Resolve app dependencies.
 COPY pubspec.* ./
 RUN dart pub get
-RUN dart run build_runner build --delete-conflicting-outputs
 
 # Copy app source code and AOT compile it.
 COPY . .
+
+# Build auto-generated source code.
+RUN dart run build_runner build --delete-conflicting-outputs
 
 # Generate a production build.
 RUN dart pub global activate dart_frog_cli
