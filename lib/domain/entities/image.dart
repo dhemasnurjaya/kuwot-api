@@ -31,7 +31,7 @@ class Image with _$Image {
         url: model.urls.regular,
         originUrl: model.links.html,
         authorName: model.user.name,
-        authorProfileImageUrl: model.user.profileImage.medium,
+        authorProfileImageUrl: model.user.profileImage.large,
         authorUrl: model.user.links.html,
       );
 }
