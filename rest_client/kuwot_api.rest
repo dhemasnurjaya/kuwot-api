@@ -2,6 +2,7 @@
 
 ### Get random quote
 GET {{baseUrl}}/quotes HTTP/1.1
+Authorization: Bearer ZsDww+WLE4KpvdptcSEEg/YR0TAp1Ys4ql6cpcWVP1bJqY7Jry5/7JQRz5k8KseIZpI9EjnyY0gL2zqx0pusf+2yg/jVR3WtJGJR3gpn7/xsRPjJElaMR+AQiBiLmTr3G8bcZ91BIbkPCKKtMRgJH8qh83dglbpeg/tCX7k6T84ES7xQ3FmbrHH1vbte+YdJBOYmNIM2wqablnXsimj6tjpA8sbwp96Vbz9uUScTmQmExs7nh5I6ghQvpmO7KngFIQLt0Lto743193zwFm1xQrukPBDGb/EodjQ5d79JVdCTemfva2lvnnqTISXuya/ToTHPvoDM5SRq1Z3z8lFLKg==
 
 ### Get random quote and translate to another language
 GET {{baseUrl}}/quotes?lang=id HTTP/1.1
@@ -14,3 +15,4 @@ GET {{baseUrl}}/quotes/1?lang=id HTTP/1.1
 
 ### Get random images
 GET {{baseUrl}}/images HTTP/1.1
+Authorization: Bearer xxx
