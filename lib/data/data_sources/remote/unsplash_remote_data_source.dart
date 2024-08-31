@@ -15,9 +15,12 @@ abstract class UnsplashRemoteDataSource {
 class UnsplashRemoteDataSourceImpl implements UnsplashRemoteDataSource {
   /// Creates a new [UnsplashRemoteDataSourceImpl] with the provided [network].
   UnsplashRemoteDataSourceImpl({
+    required Env env,
     required Network network,
-  }) : _network = network;
+  })  : _network = network,
+        _env = env;
 
+  final Env _env;
   final Network _network;
 
   @override
@@ -32,7 +35,7 @@ class UnsplashRemoteDataSourceImpl implements UnsplashRemoteDataSource {
       },
     );
     final headers = {
-      'Authorization': 'Client-ID ${Env.unsplashAccessKey}',
+      'Authorization': 'Client-ID ${_env.unsplashAccessKey}',
       'Accept-Version': 'v1',
     };
     final response = await _network.get(uri, headers: headers);

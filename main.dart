@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
+import 'package:kuwot_api/core/auth/simple_auth.dart';
 import 'package:kuwot_api/domain/repositories/image_repository.dart';
 import 'package:kuwot_api/domain/repositories/quote_repository.dart';
 import 'package:kuwot_api/injection_container.dart';
@@ -17,6 +18,10 @@ Future<HttpServer> run(Handler handler, InternetAddress ip, int port) {
     ).use(
       provider<ImageRepository>((context) {
         return ic.imageRepository;
+      }),
+    ).use(
+      provider<SimpleAuth>((context) {
+        return ic.simpleAuth;
       }),
     ),
     ip,
