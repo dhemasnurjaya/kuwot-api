@@ -1,20 +1,28 @@
 import 'package:kuwot_api/core/network/network.dart';
 import 'package:kuwot_api/data/data_sources/remote/unsplash_remote_data_source.dart';
 import 'package:kuwot_api/data/models/unsplash_image_model.dart';
+import 'package:kuwot_api/env.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import '../../../_responses/_response.dart';
 
+class MockEnv extends Mock implements Env {}
+
 class MockNetwork extends Mock implements Network {}
 
 void main() {
+  late MockEnv env;
   late MockNetwork network;
   late UnsplashRemoteDataSource dataSource;
 
   setUp(() {
+    env = MockEnv();
     network = MockNetwork();
-    dataSource = UnsplashRemoteDataSourceImpl(network: network);
+    dataSource = UnsplashRemoteDataSourceImpl(
+      env: env,
+      network: network,
+    );
 
     registerFallbackValue(Uri.parse('https://api.unsplash.com/photos/random'));
   });
@@ -25,6 +33,8 @@ void main() {
         () async {
       // arrange
       final response = readResponse('unsplash_images');
+
+      when(() => env.unsplashAccessKey).thenReturn('test_access_key');
       when(() => network.get(any(), headers: any(named: 'headers')))
           .thenAnswer((_) async => response);
 
@@ -38,6 +48,7 @@ void main() {
     test('should throw an exception when the call to network is unsuccessful',
         () {
       // arrange
+      when(() => env.unsplashAccessKey).thenReturn('test_access_key');
       when(() => network.get(any(), headers: any(named: 'headers')))
           .thenThrow(Exception());
 
