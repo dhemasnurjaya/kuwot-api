@@ -19,6 +19,12 @@ jobs:
       - name: Setup Repository
         uses: actions/checkout@v4
 
+      - name: Create .env file
+        run: |
+          touch .env
+          echo "UNSPLASH_ACCESS_KEY=unsplash_access_key" >> .env
+          echo "AUTH_PRIVATE_KEY=auth_private_key" >> .env
+
       - name: Setup dart
         uses: dart-lang/setup-dart@v1
         with:
