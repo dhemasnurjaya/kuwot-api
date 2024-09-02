@@ -6,19 +6,19 @@ import 'package:shelf_cors_headers/shelf_cors_headers.dart' as shelf;
 
 Handler middleware(Handler handler) {
   // chain the middlewares
-  return handler
-      .use(
-        fromShelfMiddleware(
-          shelf.corsHeaders(
-            headers: {
-              shelf.ACCESS_CONTROL_ALLOW_ORIGIN:
-                  'https://kuwot-api.dhemasnurjaya.com',
-            },
-          ),
-        ),
-      )
-      .use(_authCheck)
-      .use(requestLogger());
+  return handler.use(_authCheck).use(requestLogger()).use(_cors);
+}
+
+Handler _cors(Handler handler) {
+  return handler.use(
+    fromShelfMiddleware(
+      shelf.corsHeaders(
+        headers: {
+          shelf.ACCESS_CONTROL_ALLOW_ORIGIN: 'https://kuwot.dhemasnurjaya.com',
+        },
+      ),
+    ),
+  );
 }
 
 Handler _authCheck(Handler handler) {
