@@ -11,15 +11,14 @@ import 'package:uuid/validation.dart';
 /// decrypt it with private key and check if the UUID is valid.
 class SimpleAuthRSA implements SimpleAuth {
   /// Creates a new [SimpleAuthRSA] with the provided [env].
-  SimpleAuthRSA({required this.env});
+  SimpleAuthRSA({required Env env}) : _env = env;
 
-  /// [Env] implementation.
-  final Env env;
+  final Env _env;
 
   @override
   String? decryptToken(String token) {
     // read private key
-    final keyBytes = base64.decode(env.authPrivateKey);
+    final keyBytes = base64.decode(_env.authPrivateKey);
     final keyParser = RSAKeyParser();
     final rsaPrivateKey =
         keyParser.parse(utf8.decode(keyBytes)) as RSAPrivateKey;

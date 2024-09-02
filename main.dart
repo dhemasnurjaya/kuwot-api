@@ -12,16 +12,16 @@ Future<HttpServer> run(Handler handler, InternetAddress ip, int port) {
 
   return serve(
     handler.use(
+      provider<SimpleAuth>((context) {
+        return ic.simpleAuth;
+      }),
+    ).use(
       provider<QuoteRepository>((context) {
         return ic.quoteRepository;
       }),
     ).use(
       provider<ImageRepository>((context) {
         return ic.imageRepository;
-      }),
-    ).use(
-      provider<SimpleAuth>((context) {
-        return ic.simpleAuth;
       }),
     ),
     ip,
