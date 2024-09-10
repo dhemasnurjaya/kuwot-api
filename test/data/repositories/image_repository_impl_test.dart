@@ -36,6 +36,10 @@ void main() {
           username: 'username',
           name: 'name',
           location: null,
+          bio: '',
+          forHire: false,
+          totalLikes: 0,
+          totalPhotos: 0,
           links: UnsplashLinks(
             self: 'self',
             html: 'html',

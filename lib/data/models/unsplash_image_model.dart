@@ -57,6 +57,10 @@ class UnsplashUser with _$UnsplashUser {
     required String username,
     required String name,
     required String? location,
+    required String? bio,
+    required bool forHire,
+    required int totalLikes,
+    required int totalPhotos,
     required UnsplashUserProfileImages profileImage,
     required UnsplashLinks links,
   }) = _UnsplashUser;

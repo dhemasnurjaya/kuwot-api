@@ -16,6 +16,11 @@ class Image with _$Image {
     required String url,
     required String originUrl,
     required String authorName,
+    required String? authorBio,
+    required String? authorLocation,
+    required int authorTotalLikes,
+    required int authorTotalPhotos,
+    required bool authorIsForHire,
     required String authorProfileImageUrl,
     required String authorUrl,
   }) = _Image;
@@ -31,6 +36,11 @@ class Image with _$Image {
         url: model.urls.regular,
         originUrl: model.links.html,
         authorName: model.user.name,
+        authorBio: model.user.bio,
+        authorLocation: model.user.location,
+        authorTotalLikes: model.user.totalLikes,
+        authorTotalPhotos: model.user.totalPhotos,
+        authorIsForHire: model.user.forHire,
         authorProfileImageUrl: model.user.profileImage.large,
         authorUrl: model.user.links.html,
       );
