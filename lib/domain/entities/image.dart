@@ -16,8 +16,8 @@ class Image with _$Image {
     required String url,
     required String originUrl,
     required String authorName,
-    required String? authorBio,
-    required String? authorLocation,
+    required String authorBio,
+    required String authorLocation,
     required int authorTotalLikes,
     required int authorTotalPhotos,
     required bool authorIsForHire,
@@ -30,18 +30,21 @@ class Image with _$Image {
   // ignore: prefer_constructors_over_static_methods
   static Image fromModel(UnsplashImageModel model) => Image(
         id: model.id,
-        description: model.description,
+        description: model.altDescription ?? 'No description',
         color: model.color,
         blurHash: model.blurHash,
         url: model.urls.regular,
-        originUrl: model.links.html,
+        originUrl: _buildUtmUrl(model.links.html),
+        authorUrl: _buildUtmUrl(model.user.links.html),
         authorName: model.user.name,
-        authorBio: model.user.bio,
-        authorLocation: model.user.location,
+        authorBio: model.user.bio ?? 'No bio',
+        authorLocation: model.user.location ?? 'Unknown',
         authorTotalLikes: model.user.totalLikes,
         authorTotalPhotos: model.user.totalPhotos,
         authorIsForHire: model.user.forHire,
         authorProfileImageUrl: model.user.profileImage.large,
-        authorUrl: model.user.links.html,
       );
+
+  static String _buildUtmUrl(String url) =>
+      '$url?utm_source=kuwot&utm_medium=referral';
 }

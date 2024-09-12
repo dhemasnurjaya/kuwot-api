@@ -27,8 +27,8 @@ mixin _$Image {
   String get url => throw _privateConstructorUsedError;
   String get originUrl => throw _privateConstructorUsedError;
   String get authorName => throw _privateConstructorUsedError;
-  String? get authorBio => throw _privateConstructorUsedError;
-  String? get authorLocation => throw _privateConstructorUsedError;
+  String get authorBio => throw _privateConstructorUsedError;
+  String get authorLocation => throw _privateConstructorUsedError;
   int get authorTotalLikes => throw _privateConstructorUsedError;
   int get authorTotalPhotos => throw _privateConstructorUsedError;
   bool get authorIsForHire => throw _privateConstructorUsedError;
@@ -57,8 +57,8 @@ abstract class $ImageCopyWith<$Res> {
       String url,
       String originUrl,
       String authorName,
-      String? authorBio,
-      String? authorLocation,
+      String authorBio,
+      String authorLocation,
       int authorTotalLikes,
       int authorTotalPhotos,
       bool authorIsForHire,
@@ -88,8 +88,8 @@ class _$ImageCopyWithImpl<$Res, $Val extends Image>
     Object? url = null,
     Object? originUrl = null,
     Object? authorName = null,
-    Object? authorBio = freezed,
-    Object? authorLocation = freezed,
+    Object? authorBio = null,
+    Object? authorLocation = null,
     Object? authorTotalLikes = null,
     Object? authorTotalPhotos = null,
     Object? authorIsForHire = null,
@@ -125,14 +125,14 @@ class _$ImageCopyWithImpl<$Res, $Val extends Image>
           ? _value.authorName
           : authorName // ignore: cast_nullable_to_non_nullable
               as String,
-      authorBio: freezed == authorBio
+      authorBio: null == authorBio
           ? _value.authorBio
           : authorBio // ignore: cast_nullable_to_non_nullable
-              as String?,
-      authorLocation: freezed == authorLocation
+              as String,
+      authorLocation: null == authorLocation
           ? _value.authorLocation
           : authorLocation // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       authorTotalLikes: null == authorTotalLikes
           ? _value.authorTotalLikes
           : authorTotalLikes // ignore: cast_nullable_to_non_nullable
@@ -172,8 +172,8 @@ abstract class _$$ImageImplCopyWith<$Res> implements $ImageCopyWith<$Res> {
       String url,
       String originUrl,
       String authorName,
-      String? authorBio,
-      String? authorLocation,
+      String authorBio,
+      String authorLocation,
       int authorTotalLikes,
       int authorTotalPhotos,
       bool authorIsForHire,
@@ -201,8 +201,8 @@ class __$$ImageImplCopyWithImpl<$Res>
     Object? url = null,
     Object? originUrl = null,
     Object? authorName = null,
-    Object? authorBio = freezed,
-    Object? authorLocation = freezed,
+    Object? authorBio = null,
+    Object? authorLocation = null,
     Object? authorTotalLikes = null,
     Object? authorTotalPhotos = null,
     Object? authorIsForHire = null,
@@ -238,14 +238,14 @@ class __$$ImageImplCopyWithImpl<$Res>
           ? _value.authorName
           : authorName // ignore: cast_nullable_to_non_nullable
               as String,
-      authorBio: freezed == authorBio
+      authorBio: null == authorBio
           ? _value.authorBio
           : authorBio // ignore: cast_nullable_to_non_nullable
-              as String?,
-      authorLocation: freezed == authorLocation
+              as String,
+      authorLocation: null == authorLocation
           ? _value.authorLocation
           : authorLocation // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       authorTotalLikes: null == authorTotalLikes
           ? _value.authorTotalLikes
           : authorTotalLikes // ignore: cast_nullable_to_non_nullable
@@ -307,9 +307,9 @@ class _$ImageImpl implements _Image {
   @override
   final String authorName;
   @override
-  final String? authorBio;
+  final String authorBio;
   @override
-  final String? authorLocation;
+  final String authorLocation;
   @override
   final int authorTotalLikes;
   @override
@@ -402,8 +402,8 @@ abstract class _Image implements Image {
       required final String url,
       required final String originUrl,
       required final String authorName,
-      required final String? authorBio,
-      required final String? authorLocation,
+      required final String authorBio,
+      required final String authorLocation,
       required final int authorTotalLikes,
       required final int authorTotalPhotos,
       required final bool authorIsForHire,
@@ -427,9 +427,9 @@ abstract class _Image implements Image {
   @override
   String get authorName;
   @override
-  String? get authorBio;
+  String get authorBio;
   @override
-  String? get authorLocation;
+  String get authorLocation;
   @override
   int get authorTotalLikes;
   @override

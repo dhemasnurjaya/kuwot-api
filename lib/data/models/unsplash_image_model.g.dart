@@ -10,7 +10,7 @@ _$UnsplashImageModelImpl _$$UnsplashImageModelImplFromJson(
         Map<String, dynamic> json) =>
     _$UnsplashImageModelImpl(
       id: json['id'] as String,
-      description: json['alt_description'] as String,
+      altDescription: json['alt_description'] as String?,
       color: json['color'] as String,
       blurHash: json['blur_hash'] as String,
       urls: UnsplashImageUrls.fromJson(json['urls'] as Map<String, dynamic>),
@@ -22,7 +22,7 @@ Map<String, dynamic> _$$UnsplashImageModelImplToJson(
         _$UnsplashImageModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'alt_description': instance.description,
+      'alt_description': instance.altDescription,
       'color': instance.color,
       'blur_hash': instance.blurHash,
       'urls': instance.urls.toJson(),

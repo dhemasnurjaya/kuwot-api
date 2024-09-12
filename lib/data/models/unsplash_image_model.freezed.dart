@@ -21,8 +21,7 @@ UnsplashImageModel _$UnsplashImageModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$UnsplashImageModel {
   String get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'alt_description')
-  String get description => throw _privateConstructorUsedError;
+  String? get altDescription => throw _privateConstructorUsedError;
   String get color => throw _privateConstructorUsedError;
   String get blurHash => throw _privateConstructorUsedError;
   UnsplashImageUrls get urls => throw _privateConstructorUsedError;
@@ -47,7 +46,7 @@ abstract class $UnsplashImageModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      @JsonKey(name: 'alt_description') String description,
+      String? altDescription,
       String color,
       String blurHash,
       UnsplashImageUrls urls,
@@ -75,7 +74,7 @@ class _$UnsplashImageModelCopyWithImpl<$Res, $Val extends UnsplashImageModel>
   @override
   $Res call({
     Object? id = null,
-    Object? description = null,
+    Object? altDescription = freezed,
     Object? color = null,
     Object? blurHash = null,
     Object? urls = null,
@@ -87,10 +86,10 @@ class _$UnsplashImageModelCopyWithImpl<$Res, $Val extends UnsplashImageModel>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
+      altDescription: freezed == altDescription
+          ? _value.altDescription
+          : altDescription // ignore: cast_nullable_to_non_nullable
+              as String?,
       color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -155,7 +154,7 @@ abstract class _$$UnsplashImageModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      @JsonKey(name: 'alt_description') String description,
+      String? altDescription,
       String color,
       String blurHash,
       UnsplashImageUrls urls,
@@ -184,7 +183,7 @@ class __$$UnsplashImageModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? description = null,
+    Object? altDescription = freezed,
     Object? color = null,
     Object? blurHash = null,
     Object? urls = null,
@@ -196,10 +195,10 @@ class __$$UnsplashImageModelImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
+      altDescription: freezed == altDescription
+          ? _value.altDescription
+          : altDescription // ignore: cast_nullable_to_non_nullable
+              as String?,
       color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -230,7 +229,7 @@ class __$$UnsplashImageModelImplCopyWithImpl<$Res>
 class _$UnsplashImageModelImpl implements _UnsplashImageModel {
   const _$UnsplashImageModelImpl(
       {required this.id,
-      @JsonKey(name: 'alt_description') required this.description,
+      required this.altDescription,
       required this.color,
       required this.blurHash,
       required this.urls,
@@ -243,8 +242,7 @@ class _$UnsplashImageModelImpl implements _UnsplashImageModel {
   @override
   final String id;
   @override
-  @JsonKey(name: 'alt_description')
-  final String description;
+  final String? altDescription;
   @override
   final String color;
   @override
@@ -258,7 +256,7 @@ class _$UnsplashImageModelImpl implements _UnsplashImageModel {
 
   @override
   String toString() {
-    return 'UnsplashImageModel(id: $id, description: $description, color: $color, blurHash: $blurHash, urls: $urls, links: $links, user: $user)';
+    return 'UnsplashImageModel(id: $id, altDescription: $altDescription, color: $color, blurHash: $blurHash, urls: $urls, links: $links, user: $user)';
   }
 
   @override
@@ -267,8 +265,8 @@ class _$UnsplashImageModelImpl implements _UnsplashImageModel {
         (other.runtimeType == runtimeType &&
             other is _$UnsplashImageModelImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
+            (identical(other.altDescription, altDescription) ||
+                other.altDescription == altDescription) &&
             (identical(other.color, color) || other.color == color) &&
             (identical(other.blurHash, blurHash) ||
                 other.blurHash == blurHash) &&
@@ -280,7 +278,7 @@ class _$UnsplashImageModelImpl implements _UnsplashImageModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, description, color, blurHash, urls, links, user);
+      runtimeType, id, altDescription, color, blurHash, urls, links, user);
 
   /// Create a copy of UnsplashImageModel
   /// with the given fields replaced by the non-null parameter values.
@@ -302,7 +300,7 @@ class _$UnsplashImageModelImpl implements _UnsplashImageModel {
 abstract class _UnsplashImageModel implements UnsplashImageModel {
   const factory _UnsplashImageModel(
       {required final String id,
-      @JsonKey(name: 'alt_description') required final String description,
+      required final String? altDescription,
       required final String color,
       required final String blurHash,
       required final UnsplashImageUrls urls,
@@ -315,8 +313,7 @@ abstract class _UnsplashImageModel implements UnsplashImageModel {
   @override
   String get id;
   @override
-  @JsonKey(name: 'alt_description')
-  String get description;
+  String? get altDescription;
   @override
   String get color;
   @override

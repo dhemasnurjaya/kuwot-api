@@ -17,7 +17,7 @@ void main() {
       // arrange
       const tImageModel = UnsplashImageModel(
         id: 'id',
-        description: 'description',
+        altDescription: 'description',
         color: 'color',
         blurHash: 'blurHash',
         links: UnsplashLinks(
