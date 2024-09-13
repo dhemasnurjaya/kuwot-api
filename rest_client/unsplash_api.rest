@@ -1,9 +1,0 @@
-@baseUrl = https://api.unsplash.com
-@accessKey = UNSPLASH_ACCESS_KEY
-
-### get random photos
-GET {{baseUrl}}/photos/random
-    ?count=30
-    &orientation=portrait HTTP/1.1
-Authorization: Client-ID {{accessKey}}
-Accept-Version: v1
