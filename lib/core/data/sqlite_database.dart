@@ -11,8 +11,16 @@ abstract class SqliteDb {
   /// Initializes the database connection.
   void initialize();
 
-  /// Executes a query [query] with list of [queryParams].
+  /// Executes a query [query] with list of [queryParams] for a single data.
+  /// Returns a nullable [Row] object.
   Row? select(
+    String query, [
+    List<Object?> queryParams = const [],
+  ]);
+
+  /// Executes a query [query] with list of [queryParams] for multiple data.
+  /// Returns a [ResultSet] object.
+  ResultSet selectMany(
     String query, [
     List<Object?> queryParams = const [],
   ]);

@@ -2,6 +2,7 @@ import 'dart:math' show Random;
 
 import 'package:kuwot_api/core/data/sqlite_database.dart';
 import 'package:kuwot_api/data/models/quote_model.dart';
+import 'package:kuwot_api/data/models/translation_model.dart';
 
 /// A contract for local data source of quotes.
 abstract class QuoteLocalDataSource {
@@ -13,6 +14,9 @@ abstract class QuoteLocalDataSource {
 
   /// Get quote count
   int getQuoteCount();
+
+  /// Get translation list.
+  List<TranslationModel> getTranslations();
 }
 
 /// An implementation of [QuoteLocalDataSource].
@@ -66,5 +70,23 @@ class QuoteLocalDataSourceImpl implements QuoteLocalDataSource {
     );
 
     return result?['COUNT(*)'] as int;
+  }
+
+  @override
+  List<TranslationModel> getTranslations() {
+    final result = sqliteDb.selectMany(
+      'SELECT * FROM translations;',
+    );
+    final translations = <TranslationModel>[];
+    for (final row in result) {
+      translations.add(
+        TranslationModel(
+          id: row['id'] as String,
+          lang: row['lang'] as String,
+          tableName: row['table_name'] as String,
+        ),
+      );
+    }
+    return translations;
   }
 }

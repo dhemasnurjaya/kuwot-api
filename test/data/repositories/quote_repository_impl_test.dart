@@ -2,8 +2,10 @@ import 'package:kuwot_api/data/data_sources/local/quote_local_data_source.dart';
 import 'package:kuwot_api/data/data_sources/remote/translate_remote_data_source.dart';
 import 'package:kuwot_api/data/models/quote_model.dart';
 import 'package:kuwot_api/data/models/translate_model.dart';
+import 'package:kuwot_api/data/models/translation_model.dart';
 import 'package:kuwot_api/data/repositories/quote_repository_impl.dart';
 import 'package:kuwot_api/domain/entities/quote.dart';
+import 'package:kuwot_api/domain/entities/translation.dart';
 import 'package:kuwot_api/domain/repositories/quote_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -84,6 +86,29 @@ void main() {
       verify(() => mockQuoteDataSource.getRandomQuote(any())).called(1);
       verify(() => mockTranslateDataSource.translate(tQuoteModel.quote, any()))
           .called(1);
+    });
+  });
+
+  group('getTranslations', () {
+    test('should return a list of translations', () {
+      // arrange
+      const tTranslations = [
+        TranslationModel(
+          id: 'id',
+          lang: 'lang',
+          tableName: 'table_name',
+        ),
+      ];
+      when(() => mockQuoteDataSource.getTranslations())
+          .thenReturn(tTranslations);
+      // act
+      final result = quoteRepository.getTranslations();
+      // assert
+      expect(
+        result,
+        tTranslations.map(Translation.fromModel).toList(),
+      );
+      verify(() => mockQuoteDataSource.getTranslations()).called(1);
     });
   });
 }

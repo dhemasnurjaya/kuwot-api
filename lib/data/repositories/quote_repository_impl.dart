@@ -2,6 +2,7 @@ import 'package:kuwot_api/data/data_sources/local/quote_local_data_source.dart';
 import 'package:kuwot_api/data/data_sources/remote/translate_remote_data_source.dart';
 import 'package:kuwot_api/data/models/quote_model.dart';
 import 'package:kuwot_api/domain/entities/quote.dart';
+import 'package:kuwot_api/domain/entities/translation.dart';
 import 'package:kuwot_api/domain/repositories/quote_repository.dart';
 
 /// An implementation of [QuoteRepository].
@@ -68,5 +69,13 @@ class QuoteRepositoryImpl implements QuoteRepository {
     /// because it is fetched from the local data source directly, while the
     /// [QuoteRepositoryImpl.quoteDataCount] is set during initialization.
     return quoteDataSource.getQuoteCount();
+  }
+
+  @override
+  List<Translation> getTranslations() {
+    return quoteDataSource
+        .getTranslations()
+        .map(Translation.fromModel)
+        .toList();
   }
 }

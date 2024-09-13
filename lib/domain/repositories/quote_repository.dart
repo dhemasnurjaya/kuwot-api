@@ -1,4 +1,5 @@
 import 'package:kuwot_api/domain/entities/quote.dart';
+import 'package:kuwot_api/domain/entities/translation.dart';
 
 /// A contract for repositories of quotes.
 abstract class QuoteRepository {
@@ -20,4 +21,8 @@ abstract class QuoteRepository {
 
   /// Get the total number of quotes.
   int getQuoteCount();
+
+  /// Get translation list.
+  /// Returns a list of [Translation] of the translations.
+  List<Translation> getTranslations();
 }
