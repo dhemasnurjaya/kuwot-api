@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:dart_frog/dart_frog.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:kuwot_api/core/error/error_response.dart';
+import 'package:kuwot_api/core/error/failure.dart';
 import 'package:kuwot_api/domain/entities/image.dart';
 import 'package:kuwot_api/domain/repositories/image_repository.dart';
 import 'package:mocktail/mocktail.dart';
@@ -74,7 +76,7 @@ void main() {
     when(() => mockContext.read<ImageRepository>())
         .thenReturn(mockImageRepository);
     when(() => mockImageRepository.getRandomImages())
-        .thenAnswer((_) async => [tImage]);
+        .thenAnswer((_) async => const Right([tImage]));
 
     // act
     final response = await route.onRequest(mockContext);
@@ -84,6 +86,39 @@ void main() {
     final jsonBody = responseBody.first as Map<String, dynamic>;
     expect(response.statusCode, 200);
     expect(Image.fromJson(jsonBody), tImage);
+    verify(() => mockContext.read<ImageRepository>()).called(1);
+    verify(() => mockImageRepository.getRandomImages()).called(1);
+    verifyNoMoreInteractions(mockImageRepository);
+  });
+
+  test('should return 500 with error JSON when failure is returned', () async {
+    // arrange
+    const tFailure = UnexpectedFailure(message: 'test error');
+    final tExpectedResponse = Response.json(
+      statusCode: 500,
+      body: ErrorResponse(
+        message: tFailure.message,
+        code: 500,
+      ).toJson(),
+    );
+
+    when(() => mockContext.request).thenReturn(
+      Request(
+        'GET',
+        Uri.parse('http://test.com/images/1'),
+      ),
+    );
+    when(() => mockContext.read<ImageRepository>())
+        .thenReturn(mockImageRepository);
+    when(() => mockImageRepository.getRandomImages())
+        .thenAnswer((_) async => const Left(tFailure));
+
+    // act
+    final response = await route.onRequest(mockContext);
+
+    // assert
+    expect(response.statusCode, 500);
+    expect(await response.body(), await tExpectedResponse.body());
     verify(() => mockContext.read<ImageRepository>()).called(1);
     verify(() => mockImageRepository.getRandomImages()).called(1);
     verifyNoMoreInteractions(mockImageRepository);

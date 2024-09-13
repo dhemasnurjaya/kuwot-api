@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:dart_frog/dart_frog.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:kuwot_api/core/error/error_response.dart';
+import 'package:kuwot_api/core/error/failure.dart';
 import 'package:kuwot_api/domain/entities/quote.dart';
 import 'package:kuwot_api/domain/repositories/quote_repository.dart';
 import 'package:mocktail/mocktail.dart';
@@ -39,7 +41,7 @@ void main() {
     );
 
     // act
-    final response = await route.onRequest(mockContext, '1');
+    final response = route.onRequest(mockContext, '1');
 
     // assert
     expect(response.statusCode, 405);
@@ -65,7 +67,7 @@ void main() {
         .thenReturn(mockQuoteRepository);
 
     // act
-    final response = await route.onRequest(mockContext, 'invalid_id');
+    final response = route.onRequest(mockContext, 'invalid_id');
 
     // assert
     expect(response.statusCode, 400);
@@ -89,10 +91,12 @@ void main() {
     );
     when(() => mockContext.read<QuoteRepository>())
         .thenReturn(mockQuoteRepository);
-    when(() => mockQuoteRepository.getQuote(1)).thenAnswer((_) async => null);
+    when(() => mockQuoteRepository.getQuote(1)).thenReturn(
+      const Left(DataNotFoundFailure(message: 'Quote not found')),
+    );
 
     // act
-    final response = await route.onRequest(mockContext, '1');
+    final response = route.onRequest(mockContext, '1');
 
     // assert
     expect(response.statusCode, 404);
@@ -115,10 +119,10 @@ void main() {
     );
     when(() => mockContext.read<QuoteRepository>())
         .thenReturn(mockQuoteRepository);
-    when(() => mockQuoteRepository.getQuote(1)).thenAnswer((_) async => tQuote);
+    when(() => mockQuoteRepository.getQuote(1)).thenReturn(const Right(tQuote));
 
     // act
-    final response = await route.onRequest(mockContext, '1');
+    final response = route.onRequest(mockContext, '1');
 
     // assert
     final jsonBody = jsonDecode(await response.body()) as Map<String, dynamic>;

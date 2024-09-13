@@ -1,5 +1,8 @@
 import 'package:dart_frog/dart_frog.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:kuwot_api/core/error/error_response.dart';
+import 'package:kuwot_api/core/error/failure.dart';
+import 'package:kuwot_api/domain/entities/translation.dart';
 import 'package:kuwot_api/domain/repositories/quote_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -55,13 +58,54 @@ void main() {
 
     when(() => mockContext.read<QuoteRepository>())
         .thenReturn(mockQuoteRepository);
-    when(() => mockQuoteRepository.getTranslations()).thenReturn([]);
+    when(() => mockQuoteRepository.getTranslations()).thenReturn(
+      const Right([
+        Translation(
+          id: 'en',
+          lang: 'English',
+          tableName: 'quotes',
+        ),
+      ]),
+    );
 
     // act
     final response = await route.onRequest(mockContext);
 
     // assert
     expect(response.statusCode, 200);
+    verify(() => mockQuoteRepository.getTranslations()).called(1);
+  });
+
+  test('should return 500 when getTranslations returns a failure', () async {
+    // arrange
+    when(() => mockContext.request).thenReturn(
+      Request(
+        'GET',
+        Uri.parse('http://test.com/quotes/translations'),
+      ),
+    );
+
+    when(() => mockContext.read<QuoteRepository>())
+        .thenReturn(mockQuoteRepository);
+    when(() => mockQuoteRepository.getTranslations()).thenReturn(
+      const Left(UnexpectedFailure(message: 'error')),
+    );
+
+    // act
+    final response = await route.onRequest(mockContext);
+
+    // assert
+    expect(response.statusCode, 500);
+    expect(
+      await response.body(),
+      await Response.json(
+        statusCode: 500,
+        body: const ErrorResponse(
+          message: 'error',
+          code: 500,
+        ).toJson(),
+      ).body(),
+    );
     verify(() => mockQuoteRepository.getTranslations()).called(1);
   });
 }

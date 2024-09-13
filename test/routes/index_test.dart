@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:kuwot_api/core/error/failure.dart';
 import 'package:kuwot_api/domain/repositories/quote_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -27,7 +29,8 @@ void main() {
       // arrange
       when(() => mockContext.read<QuoteRepository>())
           .thenReturn(mockQuoteRepository);
-      when(() => mockQuoteRepository.getQuoteCount()).thenReturn(10);
+      when(() => mockQuoteRepository.getQuoteCount())
+          .thenReturn(const Right(10));
 
       // act
       final response = route.onRequest(mockContext);
@@ -48,6 +51,27 @@ void main() {
         DateTime.tryParse(responseBody['time'] as String),
         isA<DateTime>(),
       );
+      verify(() => mockContext.read<QuoteRepository>()).called(1);
+      verify(() => mockQuoteRepository.getQuoteCount()).called(1);
+      verifyNoMoreInteractions(mockQuoteRepository);
+    });
+
+    test('should return 500 when getQuoteCount returns a failure', () async {
+      // arrange
+      when(() => mockContext.read<QuoteRepository>())
+          .thenReturn(mockQuoteRepository);
+      when(() => mockQuoteRepository.getQuoteCount())
+          .thenReturn(const Left(UnexpectedFailure(message: 'error')));
+
+      // act
+      final response = route.onRequest(mockContext);
+
+      // assert
+      final responseBody =
+          jsonDecode(await response.body()) as Map<String, dynamic>;
+      expect(response.statusCode, equals(HttpStatus.internalServerError));
+      expect(responseBody['message'], equals('error'));
+      expect(responseBody['code'], equals(500));
       verify(() => mockContext.read<QuoteRepository>()).called(1);
       verify(() => mockQuoteRepository.getQuoteCount()).called(1);
       verifyNoMoreInteractions(mockQuoteRepository);

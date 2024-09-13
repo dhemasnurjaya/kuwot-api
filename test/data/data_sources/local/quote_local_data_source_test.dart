@@ -31,7 +31,7 @@ void main() {
       );
       when(() => mockSqliteDb.select(any(), any())).thenReturn(tRow);
       // act
-      final result = quoteLocalDataSource.getRandomQuote(10);
+      final result = quoteLocalDataSource.getRandomQuote(maxRandomId: 10);
       // assert
       expect(result, isA<QuoteModel>());
       verify(() => mockSqliteDb.select(any(), any())).called(1);
@@ -41,7 +41,7 @@ void main() {
       // arrange
       when(() => mockSqliteDb.select(any(), any())).thenThrow(Exception());
       // act
-      QuoteModel call() => quoteLocalDataSource.getRandomQuote(10);
+      QuoteModel call() => quoteLocalDataSource.getRandomQuote(maxRandomId: 10);
       // assert
       expect(call, throwsA(isA<Exception>()));
       verify(() => mockSqliteDb.select(any(), any())).called(1);
@@ -62,7 +62,7 @@ void main() {
       );
       when(() => mockSqliteDb.select(any(), any())).thenReturn(tRow);
       // act
-      final result = quoteLocalDataSource.getQuote(1);
+      final result = quoteLocalDataSource.getQuote(id: 1);
       // assert
       expect(result, isA<QuoteModel>());
       verify(() => mockSqliteDb.select(any(), any())).called(1);
@@ -72,7 +72,7 @@ void main() {
       // arrange
       when(() => mockSqliteDb.select(any(), any())).thenReturn(null);
       // act
-      final result = quoteLocalDataSource.getQuote(1);
+      final result = quoteLocalDataSource.getQuote(id: 1);
       // assert
       expect(result, isNull);
       verify(() => mockSqliteDb.select(any(), any())).called(1);

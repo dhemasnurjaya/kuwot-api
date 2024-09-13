@@ -7,10 +7,16 @@ import 'package:kuwot_api/data/models/translation_model.dart';
 /// A contract for local data source of quotes.
 abstract class QuoteLocalDataSource {
   /// Get a random quote.
-  QuoteModel getRandomQuote(int maxRandomId);
+  QuoteModel getRandomQuote({
+    required int maxRandomId,
+    String? tableName,
+  });
 
   /// Get a quote by its [id].
-  QuoteModel? getQuote(int id);
+  QuoteModel? getQuote({
+    required int id,
+    String? tableName,
+  });
 
   /// Get quote count
   int getQuoteCount();
@@ -34,11 +40,12 @@ class QuoteLocalDataSourceImpl implements QuoteLocalDataSource {
   int _getRandomId(int min, int max) => min + _random.nextInt(max - min);
 
   @override
-  QuoteModel getRandomQuote(int maxRandomId) {
-    final result = sqliteDb.select(
-      'SELECT * FROM quotes WHERE id = ?;',
-      [_getRandomId(1, maxRandomId)],
-    );
+  QuoteModel getRandomQuote({
+    required int maxRandomId,
+    String? tableName,
+  }) {
+    final query = 'SELECT * FROM ${tableName ?? 'quotes'} WHERE id = ?;';
+    final result = sqliteDb.select(query, [_getRandomId(1, maxRandomId)]);
 
     return QuoteModel(
       id: result?['id'] as int,
@@ -48,11 +55,12 @@ class QuoteLocalDataSourceImpl implements QuoteLocalDataSource {
   }
 
   @override
-  QuoteModel? getQuote(int id) {
-    final result = sqliteDb.select(
-      'SELECT * FROM quotes WHERE id = ?;',
-      [id],
-    );
+  QuoteModel? getQuote({
+    required int id,
+    String? tableName,
+  }) {
+    final query = 'SELECT * FROM ${tableName ?? 'quotes'} WHERE id = ?;';
+    final result = sqliteDb.select(query, [id]);
 
     return result == null
         ? null

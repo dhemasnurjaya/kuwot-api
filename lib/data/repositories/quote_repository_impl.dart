@@ -1,6 +1,8 @@
+import 'package:fpdart/fpdart.dart';
+import 'package:kuwot_api/core/error/failure.dart';
 import 'package:kuwot_api/data/data_sources/local/quote_local_data_source.dart';
 import 'package:kuwot_api/data/data_sources/remote/translate_remote_data_source.dart';
-import 'package:kuwot_api/data/models/quote_model.dart';
+import 'package:kuwot_api/data/models/translation_model.dart';
 import 'package:kuwot_api/domain/entities/quote.dart';
 import 'package:kuwot_api/domain/entities/translation.dart';
 import 'package:kuwot_api/domain/repositories/quote_repository.dart';
@@ -12,9 +14,10 @@ class QuoteRepositoryImpl implements QuoteRepository {
   /// [quoteDataSource] is the local data source of quotes.
   /// [translateDataSource] is the remote data source of translation.
   QuoteRepositoryImpl({
-    required this.quoteDataCount,
     required this.quoteDataSource,
     required this.translateDataSource,
+    required this.quoteDataCount,
+    required this.supportedTranslation,
   });
 
   /// The local data source of quotes.
@@ -27,55 +30,95 @@ class QuoteRepositoryImpl implements QuoteRepository {
   /// This is set to the total count of quotes.
   final int quoteDataCount;
 
-  @override
-  Future<Quote> getRandomQuote({String? langId}) {
-    final quoteModel = quoteDataSource.getRandomQuote(quoteDataCount);
-    return _translateQuote(quoteModel, langId);
-  }
+  /// The list of supported translations.
+  /// Used to check if user input is a valid language code.
+  final List<TranslationModel> supportedTranslation;
 
   @override
-  Future<Quote?> getQuote(int id, {String? langId}) {
-    final quoteModel = quoteDataSource.getQuote(id);
-    if (quoteModel == null) {
-      return Future.value();
+  Either<Failure, Quote> getRandomQuote({String? langId}) {
+    try {
+      if (langId != null) {
+        final isSupported = supportedTranslation.any(
+          (element) => element.id == langId,
+        );
+        if (!isSupported) {
+          return const Left(
+            InvalidRequestFailure(
+              message: 'Language not supported',
+            ),
+          );
+        }
+      }
+
+      final translation =
+          supportedTranslation.where((e) => e.id == langId).firstOrNull;
+      final quoteModel = quoteDataSource.getRandomQuote(
+        maxRandomId: quoteDataCount,
+        tableName: translation?.tableName,
+      );
+      return Right(Quote.fromModel(quoteModel));
+    } on Exception catch (e) {
+      return Left(DataNotFoundFailure(message: e.toString()));
     }
-
-    return _translateQuote(quoteModel, langId);
-  }
-
-  Future<Quote> _translateQuote(
-    QuoteModel quoteModel,
-    String? langId,
-  ) async {
-    if (langId == null) {
-      return Quote.fromModel(quoteModel);
-    }
-
-    final result = await translateDataSource.translate(
-      quoteModel.quote,
-      langId,
-    );
-
-    return Quote.fromModel(
-      quoteModel.copyWith(
-        quote: result.translatedText,
-      ),
-    );
   }
 
   @override
-  int getQuoteCount() {
+  Either<Failure, Quote> getQuote(int id, {String? langId}) {
+    try {
+      if (langId != null) {
+        final isSupported = supportedTranslation.any(
+          (element) => element.id == langId,
+        );
+        if (!isSupported) {
+          return const Left(
+            InvalidRequestFailure(
+              message: 'Language not supported',
+            ),
+          );
+        }
+      }
+
+      final translation =
+          supportedTranslation.where((e) => e.id == langId).firstOrNull;
+      final quoteModel = quoteDataSource.getQuote(
+        id: id,
+        tableName: translation?.tableName,
+      );
+
+      if (quoteModel == null) {
+        return Left(
+          DataNotFoundFailure(
+            message: 'Quote with id $id not found',
+          ),
+        );
+      }
+
+      return Right(Quote.fromModel(quoteModel));
+    } on Exception catch (e) {
+      return Left(UnexpectedFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Either<Failure, int> getQuoteCount() {
     /// May differ than [QuoteRepositoryImpl.quoteDataCount]
     /// because it is fetched from the local data source directly, while the
     /// [QuoteRepositoryImpl.quoteDataCount] is set during initialization.
-    return quoteDataSource.getQuoteCount();
+    try {
+      final count = quoteDataSource.getQuoteCount();
+      return Right(count);
+    } on Exception catch (e) {
+      return Left(UnexpectedFailure(message: e.toString()));
+    }
   }
 
   @override
-  List<Translation> getTranslations() {
-    return quoteDataSource
-        .getTranslations()
-        .map(Translation.fromModel)
-        .toList();
+  Either<Failure, List<Translation>> getTranslations() {
+    try {
+      final result = quoteDataSource.getTranslations();
+      return Right(result.map(Translation.fromModel).toList());
+    } on Exception catch (e) {
+      return Left(UnexpectedFailure(message: e.toString()));
+    }
   }
 }
