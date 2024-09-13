@@ -10,7 +10,7 @@ class UnsplashImageModel with _$UnsplashImageModel {
   @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
   const factory UnsplashImageModel({
     required String id,
-    @JsonKey(name: 'alt_description') required String description,
+    required String? altDescription,
     required String color,
     required String blurHash,
     required UnsplashImageUrls urls,
@@ -57,6 +57,10 @@ class UnsplashUser with _$UnsplashUser {
     required String username,
     required String name,
     required String? location,
+    required String? bio,
+    required bool forHire,
+    required int totalLikes,
+    required int totalPhotos,
     required UnsplashUserProfileImages profileImage,
     required UnsplashLinks links,
   }) = _UnsplashUser;

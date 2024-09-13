@@ -21,8 +21,7 @@ UnsplashImageModel _$UnsplashImageModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$UnsplashImageModel {
   String get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'alt_description')
-  String get description => throw _privateConstructorUsedError;
+  String? get altDescription => throw _privateConstructorUsedError;
   String get color => throw _privateConstructorUsedError;
   String get blurHash => throw _privateConstructorUsedError;
   UnsplashImageUrls get urls => throw _privateConstructorUsedError;
@@ -47,7 +46,7 @@ abstract class $UnsplashImageModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      @JsonKey(name: 'alt_description') String description,
+      String? altDescription,
       String color,
       String blurHash,
       UnsplashImageUrls urls,
@@ -75,7 +74,7 @@ class _$UnsplashImageModelCopyWithImpl<$Res, $Val extends UnsplashImageModel>
   @override
   $Res call({
     Object? id = null,
-    Object? description = null,
+    Object? altDescription = freezed,
     Object? color = null,
     Object? blurHash = null,
     Object? urls = null,
@@ -87,10 +86,10 @@ class _$UnsplashImageModelCopyWithImpl<$Res, $Val extends UnsplashImageModel>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
+      altDescription: freezed == altDescription
+          ? _value.altDescription
+          : altDescription // ignore: cast_nullable_to_non_nullable
+              as String?,
       color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -155,7 +154,7 @@ abstract class _$$UnsplashImageModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      @JsonKey(name: 'alt_description') String description,
+      String? altDescription,
       String color,
       String blurHash,
       UnsplashImageUrls urls,
@@ -184,7 +183,7 @@ class __$$UnsplashImageModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? description = null,
+    Object? altDescription = freezed,
     Object? color = null,
     Object? blurHash = null,
     Object? urls = null,
@@ -196,10 +195,10 @@ class __$$UnsplashImageModelImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
+      altDescription: freezed == altDescription
+          ? _value.altDescription
+          : altDescription // ignore: cast_nullable_to_non_nullable
+              as String?,
       color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -230,7 +229,7 @@ class __$$UnsplashImageModelImplCopyWithImpl<$Res>
 class _$UnsplashImageModelImpl implements _UnsplashImageModel {
   const _$UnsplashImageModelImpl(
       {required this.id,
-      @JsonKey(name: 'alt_description') required this.description,
+      required this.altDescription,
       required this.color,
       required this.blurHash,
       required this.urls,
@@ -243,8 +242,7 @@ class _$UnsplashImageModelImpl implements _UnsplashImageModel {
   @override
   final String id;
   @override
-  @JsonKey(name: 'alt_description')
-  final String description;
+  final String? altDescription;
   @override
   final String color;
   @override
@@ -258,7 +256,7 @@ class _$UnsplashImageModelImpl implements _UnsplashImageModel {
 
   @override
   String toString() {
-    return 'UnsplashImageModel(id: $id, description: $description, color: $color, blurHash: $blurHash, urls: $urls, links: $links, user: $user)';
+    return 'UnsplashImageModel(id: $id, altDescription: $altDescription, color: $color, blurHash: $blurHash, urls: $urls, links: $links, user: $user)';
   }
 
   @override
@@ -267,8 +265,8 @@ class _$UnsplashImageModelImpl implements _UnsplashImageModel {
         (other.runtimeType == runtimeType &&
             other is _$UnsplashImageModelImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
+            (identical(other.altDescription, altDescription) ||
+                other.altDescription == altDescription) &&
             (identical(other.color, color) || other.color == color) &&
             (identical(other.blurHash, blurHash) ||
                 other.blurHash == blurHash) &&
@@ -280,7 +278,7 @@ class _$UnsplashImageModelImpl implements _UnsplashImageModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, description, color, blurHash, urls, links, user);
+      runtimeType, id, altDescription, color, blurHash, urls, links, user);
 
   /// Create a copy of UnsplashImageModel
   /// with the given fields replaced by the non-null parameter values.
@@ -302,7 +300,7 @@ class _$UnsplashImageModelImpl implements _UnsplashImageModel {
 abstract class _UnsplashImageModel implements UnsplashImageModel {
   const factory _UnsplashImageModel(
       {required final String id,
-      @JsonKey(name: 'alt_description') required final String description,
+      required final String? altDescription,
       required final String color,
       required final String blurHash,
       required final UnsplashImageUrls urls,
@@ -315,8 +313,7 @@ abstract class _UnsplashImageModel implements UnsplashImageModel {
   @override
   String get id;
   @override
-  @JsonKey(name: 'alt_description')
-  String get description;
+  String? get altDescription;
   @override
   String get color;
   @override
@@ -742,6 +739,10 @@ mixin _$UnsplashUser {
   String get username => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String? get location => throw _privateConstructorUsedError;
+  String? get bio => throw _privateConstructorUsedError;
+  bool get forHire => throw _privateConstructorUsedError;
+  int get totalLikes => throw _privateConstructorUsedError;
+  int get totalPhotos => throw _privateConstructorUsedError;
   UnsplashUserProfileImages get profileImage =>
       throw _privateConstructorUsedError;
   UnsplashLinks get links => throw _privateConstructorUsedError;
@@ -767,6 +768,10 @@ abstract class $UnsplashUserCopyWith<$Res> {
       String username,
       String name,
       String? location,
+      String? bio,
+      bool forHire,
+      int totalLikes,
+      int totalPhotos,
       UnsplashUserProfileImages profileImage,
       UnsplashLinks links});
 
@@ -793,6 +798,10 @@ class _$UnsplashUserCopyWithImpl<$Res, $Val extends UnsplashUser>
     Object? username = null,
     Object? name = null,
     Object? location = freezed,
+    Object? bio = freezed,
+    Object? forHire = null,
+    Object? totalLikes = null,
+    Object? totalPhotos = null,
     Object? profileImage = null,
     Object? links = null,
   }) {
@@ -813,6 +822,22 @@ class _$UnsplashUserCopyWithImpl<$Res, $Val extends UnsplashUser>
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as String?,
+      bio: freezed == bio
+          ? _value.bio
+          : bio // ignore: cast_nullable_to_non_nullable
+              as String?,
+      forHire: null == forHire
+          ? _value.forHire
+          : forHire // ignore: cast_nullable_to_non_nullable
+              as bool,
+      totalLikes: null == totalLikes
+          ? _value.totalLikes
+          : totalLikes // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalPhotos: null == totalPhotos
+          ? _value.totalPhotos
+          : totalPhotos // ignore: cast_nullable_to_non_nullable
+              as int,
       profileImage: null == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
@@ -859,6 +884,10 @@ abstract class _$$UnsplashUserImplCopyWith<$Res>
       String username,
       String name,
       String? location,
+      String? bio,
+      bool forHire,
+      int totalLikes,
+      int totalPhotos,
       UnsplashUserProfileImages profileImage,
       UnsplashLinks links});
 
@@ -885,6 +914,10 @@ class __$$UnsplashUserImplCopyWithImpl<$Res>
     Object? username = null,
     Object? name = null,
     Object? location = freezed,
+    Object? bio = freezed,
+    Object? forHire = null,
+    Object? totalLikes = null,
+    Object? totalPhotos = null,
     Object? profileImage = null,
     Object? links = null,
   }) {
@@ -905,6 +938,22 @@ class __$$UnsplashUserImplCopyWithImpl<$Res>
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as String?,
+      bio: freezed == bio
+          ? _value.bio
+          : bio // ignore: cast_nullable_to_non_nullable
+              as String?,
+      forHire: null == forHire
+          ? _value.forHire
+          : forHire // ignore: cast_nullable_to_non_nullable
+              as bool,
+      totalLikes: null == totalLikes
+          ? _value.totalLikes
+          : totalLikes // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalPhotos: null == totalPhotos
+          ? _value.totalPhotos
+          : totalPhotos // ignore: cast_nullable_to_non_nullable
+              as int,
       profileImage: null == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
@@ -926,6 +975,10 @@ class _$UnsplashUserImpl implements _UnsplashUser {
       required this.username,
       required this.name,
       required this.location,
+      required this.bio,
+      required this.forHire,
+      required this.totalLikes,
+      required this.totalPhotos,
       required this.profileImage,
       required this.links});
 
@@ -941,13 +994,21 @@ class _$UnsplashUserImpl implements _UnsplashUser {
   @override
   final String? location;
   @override
+  final String? bio;
+  @override
+  final bool forHire;
+  @override
+  final int totalLikes;
+  @override
+  final int totalPhotos;
+  @override
   final UnsplashUserProfileImages profileImage;
   @override
   final UnsplashLinks links;
 
   @override
   String toString() {
-    return 'UnsplashUser(id: $id, username: $username, name: $name, location: $location, profileImage: $profileImage, links: $links)';
+    return 'UnsplashUser(id: $id, username: $username, name: $name, location: $location, bio: $bio, forHire: $forHire, totalLikes: $totalLikes, totalPhotos: $totalPhotos, profileImage: $profileImage, links: $links)';
   }
 
   @override
@@ -961,6 +1022,12 @@ class _$UnsplashUserImpl implements _UnsplashUser {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.location, location) ||
                 other.location == location) &&
+            (identical(other.bio, bio) || other.bio == bio) &&
+            (identical(other.forHire, forHire) || other.forHire == forHire) &&
+            (identical(other.totalLikes, totalLikes) ||
+                other.totalLikes == totalLikes) &&
+            (identical(other.totalPhotos, totalPhotos) ||
+                other.totalPhotos == totalPhotos) &&
             (identical(other.profileImage, profileImage) ||
                 other.profileImage == profileImage) &&
             (identical(other.links, links) || other.links == links));
@@ -968,8 +1035,8 @@ class _$UnsplashUserImpl implements _UnsplashUser {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, username, name, location, profileImage, links);
+  int get hashCode => Object.hash(runtimeType, id, username, name, location,
+      bio, forHire, totalLikes, totalPhotos, profileImage, links);
 
   /// Create a copy of UnsplashUser
   /// with the given fields replaced by the non-null parameter values.
@@ -993,6 +1060,10 @@ abstract class _UnsplashUser implements UnsplashUser {
       required final String username,
       required final String name,
       required final String? location,
+      required final String? bio,
+      required final bool forHire,
+      required final int totalLikes,
+      required final int totalPhotos,
       required final UnsplashUserProfileImages profileImage,
       required final UnsplashLinks links}) = _$UnsplashUserImpl;
 
@@ -1007,6 +1078,14 @@ abstract class _UnsplashUser implements UnsplashUser {
   String get name;
   @override
   String? get location;
+  @override
+  String? get bio;
+  @override
+  bool get forHire;
+  @override
+  int get totalLikes;
+  @override
+  int get totalPhotos;
   @override
   UnsplashUserProfileImages get profileImage;
   @override
