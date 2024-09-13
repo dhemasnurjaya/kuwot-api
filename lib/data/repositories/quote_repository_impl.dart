@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:kuwot_api/core/error/failure.dart';
 import 'package:kuwot_api/data/data_sources/local/quote_local_data_source.dart';
-import 'package:kuwot_api/data/data_sources/remote/translate_remote_data_source.dart';
 import 'package:kuwot_api/data/models/translation_model.dart';
 import 'package:kuwot_api/domain/entities/quote.dart';
 import 'package:kuwot_api/domain/entities/translation.dart';
@@ -12,19 +11,14 @@ class QuoteRepositoryImpl implements QuoteRepository {
   /// Creates a new [QuoteRepositoryImpl].
   ///
   /// [quoteDataSource] is the local data source of quotes.
-  /// [translateDataSource] is the remote data source of translation.
   QuoteRepositoryImpl({
     required this.quoteDataSource,
-    required this.translateDataSource,
     required this.quoteDataCount,
     required this.supportedTranslation,
   });
 
   /// The local data source of quotes.
   final QuoteLocalDataSource quoteDataSource;
-
-  /// The remote data source of translation.
-  final TranslateRemoteDataSource translateDataSource;
 
   /// The maximum random id, used to get a random quote.
   /// This is set to the total count of quotes.

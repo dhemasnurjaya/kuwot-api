@@ -4,7 +4,6 @@ import 'package:kuwot_api/core/auth/simple_auth.dart';
 import 'package:kuwot_api/core/auth/simple_auth_rsa.dart';
 import 'package:kuwot_api/core/network/network.dart';
 import 'package:kuwot_api/data/data_sources/local/quote_local_data_source.dart';
-import 'package:kuwot_api/data/data_sources/remote/translate_remote_data_source.dart';
 import 'package:kuwot_api/data/data_sources/remote/unsplash_remote_data_source.dart';
 import 'package:kuwot_api/data/quote_database.dart';
 import 'package:kuwot_api/data/repositories/image_repository_impl.dart';
@@ -29,7 +28,6 @@ class InjectionContainer {
   SimpleAuth? _simpleAuth;
   QuoteDb? _quoteDatabase;
   QuoteLocalDataSource? _quoteLocalDataSource;
-  TranslateRemoteDataSource? _translateRemoteDataSource;
   QuoteRepository? _quoteRepository;
   ImageRepository? _imageRepository;
 
@@ -54,20 +52,12 @@ class InjectionContainer {
     );
   }
 
-  /// [TranslateRemoteDataSource] instance, accessing the translation API.
-  TranslateRemoteDataSource get translateRemoteDataSource =>
-      _translateRemoteDataSource ??= TranslateRemoteDataSourceImpl(
-        network: network,
-      );
-
-  /// [QuoteRepository] instance, combining [QuoteLocalDataSource] and
-  /// [TranslateRemoteDataSource] for quotes.
+  /// [QuoteRepository] instance, using [QuoteLocalDataSource]
   QuoteRepository get quoteRepository {
     final quoteDataCount = quoteLocalDataSource.getQuoteCount();
     final supportedTranslation = quoteLocalDataSource.getTranslations();
     return _quoteRepository ??= QuoteRepositoryImpl(
       quoteDataSource: quoteLocalDataSource,
-      translateDataSource: translateRemoteDataSource,
       quoteDataCount: quoteDataCount,
       supportedTranslation: supportedTranslation,
     );
