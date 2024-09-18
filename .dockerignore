@@ -10,3 +10,4 @@ build/
 .vscode
 test/
 test_load/
+quotes.db
