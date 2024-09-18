@@ -83,7 +83,7 @@ class QuoteLocalDataSourceImpl implements QuoteLocalDataSource {
   @override
   List<TranslationModel> getTranslations() {
     final result = sqliteDb.selectMany(
-      'SELECT * FROM translations;',
+      'SELECT * FROM translations ORDER BY id;',
     );
     final translations = <TranslationModel>[];
     for (final row in result) {
