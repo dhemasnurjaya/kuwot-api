@@ -30,7 +30,21 @@ class QuoteDb implements SqliteDb {
       );
     }
 
-    return _conn?.select(query, queryParams).firstOrNull;
+    return _conn!.select(query, queryParams).firstOrNull;
+  }
+
+  @override
+  ResultSet selectMany(
+    String query, [
+    List<Object?> queryParams = const [],
+  ]) {
+    if (_conn == null) {
+      throw Exception(
+        'Database not initialized, call initialize() before proceeding',
+      );
+    }
+
+    return _conn!.select(query, queryParams);
   }
 
   @override

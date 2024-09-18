@@ -1,11 +1,12 @@
 import 'package:dart_frog/dart_frog.dart';
 import 'package:kuwot_api/core/error/error_response.dart';
+import 'package:kuwot_api/core/error/failure.dart';
 import 'package:kuwot_api/domain/repositories/quote_repository.dart';
 
-Future<Response> onRequest(
+Response onRequest(
   RequestContext context,
   String id,
-) async {
+) {
   final method = context.request.method;
   final params = context.request.uri.queryParameters;
 
@@ -23,21 +24,29 @@ Future<Response> onRequest(
       );
     }
 
-    final quote = await quoteRepository.getQuote(
-      int.parse(id),
+    final result = quoteRepository.getQuote(
+      quoteId,
       langId: params['lang'],
     );
-    if (quote == null) {
-      return Response.json(
-        statusCode: 404,
-        body: const ErrorResponse(
-          message: 'Quote not found',
-          code: 404,
-        ).toJson(),
-      );
-    }
 
-    return Response.json(body: quote.toJson());
+    return result.fold(
+      (failure) {
+        var statusCode = 500;
+
+        if (failure is DataNotFoundFailure) {
+          statusCode = 404;
+        }
+
+        return Response.json(
+          statusCode: statusCode,
+          body: ErrorResponse(
+            message: failure.message,
+            code: statusCode,
+          ).toJson(),
+        );
+      },
+      (quote) => Response.json(body: quote.toJson()),
+    );
   }
 
   return Response.json(

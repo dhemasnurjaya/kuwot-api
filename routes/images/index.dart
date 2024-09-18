@@ -7,8 +7,20 @@ Future<Response> onRequest(RequestContext context) async {
 
   if (method == HttpMethod.get) {
     final imageRepository = context.read<ImageRepository>();
-    final images = await imageRepository.getRandomImages();
-    return Response.json(body: images.map((e) => e.toJson()).toList());
+    final result = await imageRepository.getRandomImages();
+
+    return result.fold(
+      (failure) => Response.json(
+        statusCode: 500,
+        body: ErrorResponse(
+          message: failure.message,
+          code: 500,
+        ).toJson(),
+      ),
+      (images) => Response.json(
+        body: images.map((e) => e.toJson()).toList(),
+      ),
+    );
   }
 
   return Response.json(

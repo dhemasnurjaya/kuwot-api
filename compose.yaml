@@ -5,3 +5,5 @@ services:
     container_name: kuwot_api_server
     ports:
       - 3000:8080
+    volumes:
+      - ./quotes.db:/app/quotes.db:ro
