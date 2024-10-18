@@ -54,6 +54,7 @@ COPY --from=build /runtime/ /
 COPY --from=build /app/build/bin/server /app/bin/
 #COPY --from=build /app/build/quotes.db /app/
 COPY --from=build /app/build/.env /app/
+COPY --from=build /app/build/public/ /app/public/
 # Uncomment the following line if you are serving static files.
 # COPY --from=build /app/build/public /public/
 
