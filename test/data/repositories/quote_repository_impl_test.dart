@@ -22,7 +22,6 @@ void main() {
     mockQuoteDataSource = MockQuoteDataSource();
     quoteRepository = QuoteRepositoryImpl(
       quoteDataSource: mockQuoteDataSource,
-      quoteDataCount: 10,
       supportedTranslation: [
         const TranslationModel(
           id: tLangId,

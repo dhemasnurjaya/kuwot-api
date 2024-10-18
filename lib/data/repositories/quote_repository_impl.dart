@@ -13,16 +13,11 @@ class QuoteRepositoryImpl implements QuoteRepository {
   /// [quoteDataSource] is the local data source of quotes.
   QuoteRepositoryImpl({
     required this.quoteDataSource,
-    required this.quoteDataCount,
     required this.supportedTranslation,
   });
 
   /// The local data source of quotes.
   final QuoteLocalDataSource quoteDataSource;
-
-  /// The maximum random id, used to get a random quote.
-  /// This is set to the total count of quotes.
-  final int quoteDataCount;
 
   /// The list of supported translations.
   /// Used to check if user input is a valid language code.
@@ -47,7 +42,7 @@ class QuoteRepositoryImpl implements QuoteRepository {
       final translation =
           supportedTranslation.where((e) => e.id == langId).firstOrNull;
       final quoteModel = quoteDataSource.getRandomQuote(
-        maxRandomId: quoteDataCount,
+        maxRandomId: totalQuotesCount,
         tableName: translation?.tableName,
       );
       return Right(Quote.fromModel(quoteModel));
@@ -88,19 +83,6 @@ class QuoteRepositoryImpl implements QuoteRepository {
       }
 
       return Right(Quote.fromModel(quoteModel));
-    } on Exception catch (e) {
-      return Left(UnexpectedFailure(message: e.toString()));
-    }
-  }
-
-  @override
-  Either<Failure, int> getQuoteCount() {
-    /// May differ than [QuoteRepositoryImpl.quoteDataCount]
-    /// because it is fetched from the local data source directly, while the
-    /// [QuoteRepositoryImpl.quoteDataCount] is set during initialization.
-    try {
-      final count = quoteDataSource.getQuoteCount();
-      return Right(count);
     } on Exception catch (e) {
       return Left(UnexpectedFailure(message: e.toString()));
     }
