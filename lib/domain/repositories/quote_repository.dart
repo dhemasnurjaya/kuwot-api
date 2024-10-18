@@ -21,9 +21,6 @@ abstract class QuoteRepository {
   /// Returns a Future of [Quote] of the quote with the provided [id].
   Either<Failure, Quote> getQuote(int id, {String? langId});
 
-  /// Get the total number of quotes.
-  Either<Failure, int> getQuoteCount();
-
   /// Get translation list.
   /// Returns a list of [Translation] of the translations.
   Either<Failure, List<Translation>> getTranslations();

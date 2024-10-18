@@ -4,6 +4,10 @@ import 'package:kuwot_api/core/data/sqlite_database.dart';
 import 'package:kuwot_api/data/models/quote_model.dart';
 import 'package:kuwot_api/data/models/translation_model.dart';
 
+/// The total number of quotes in the database.
+/// Used to generate random quotes.
+const totalQuotesCount = 250000;
+
 /// A contract for local data source of quotes.
 abstract class QuoteLocalDataSource {
   /// Get a random quote.
@@ -17,9 +21,6 @@ abstract class QuoteLocalDataSource {
     required int id,
     String? tableName,
   });
-
-  /// Get quote count
-  int getQuoteCount();
 
   /// Get translation list.
   List<TranslationModel> getTranslations();
@@ -69,15 +70,6 @@ class QuoteLocalDataSourceImpl implements QuoteLocalDataSource {
             quote: result['quote'] as String,
             author: result['author'] as String,
           );
-  }
-
-  @override
-  int getQuoteCount() {
-    final result = sqliteDb.select(
-      'SELECT COUNT(*) FROM quotes;',
-    );
-
-    return result?['COUNT(*)'] as int;
   }
 
   @override

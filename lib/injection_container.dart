@@ -54,11 +54,9 @@ class InjectionContainer {
 
   /// [QuoteRepository] instance, using [QuoteLocalDataSource]
   QuoteRepository get quoteRepository {
-    final quoteDataCount = quoteLocalDataSource.getQuoteCount();
     final supportedTranslation = quoteLocalDataSource.getTranslations();
     return _quoteRepository ??= QuoteRepositoryImpl(
       quoteDataSource: quoteLocalDataSource,
-      quoteDataCount: quoteDataCount,
       supportedTranslation: supportedTranslation,
     );
   }

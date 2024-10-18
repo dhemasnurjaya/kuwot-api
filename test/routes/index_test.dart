@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:kuwot_api/core/error/failure.dart';
+import 'package:kuwot_api/domain/entities/translation.dart';
 import 'package:kuwot_api/domain/repositories/quote_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -24,13 +25,16 @@ void main() {
   });
 
   group('GET /', () {
-    test('response with JSON containing message, date, and quote count".',
+    test('response with JSON containing message, date, supported languages".',
         () async {
       // arrange
+      const tSupportedLanguages = [
+        Translation(id: 'en', lang: 'English', tableName: 'quotes'),
+      ];
       when(() => mockContext.read<QuoteRepository>())
           .thenReturn(mockQuoteRepository);
-      when(() => mockQuoteRepository.getQuoteCount())
-          .thenReturn(const Right(10));
+      when(() => mockQuoteRepository.getTranslations())
+          .thenReturn(const Right(tSupportedLanguages));
 
       // act
       final response = route.onRequest(mockContext);
@@ -38,29 +42,36 @@ void main() {
       // assert
       final responseBody =
           jsonDecode(await response.body()) as Map<String, dynamic>;
+      final tExpectedSupportedTranslations = tSupportedLanguages
+          .map((e) => {
+                'id': e.id,
+                'lang': e.lang,
+                'tableName': e.tableName,
+              })
+          .toList();
       expect(response.statusCode, equals(HttpStatus.ok));
       expect(
         responseBody['message'],
         equals('Welcome to Kuwot API!'),
       );
       expect(
-        responseBody['quoteCount'],
-        equals(10),
+        responseBody['supportedLanguages'],
+        equals(tExpectedSupportedTranslations),
       );
       expect(
         DateTime.tryParse(responseBody['time'] as String),
         isA<DateTime>(),
       );
       verify(() => mockContext.read<QuoteRepository>()).called(1);
-      verify(() => mockQuoteRepository.getQuoteCount()).called(1);
+      verify(() => mockQuoteRepository.getTranslations()).called(1);
       verifyNoMoreInteractions(mockQuoteRepository);
     });
 
-    test('should return 500 when getQuoteCount returns a failure', () async {
+    test('should return 500 when getTranslations returns a failure', () async {
       // arrange
       when(() => mockContext.read<QuoteRepository>())
           .thenReturn(mockQuoteRepository);
-      when(() => mockQuoteRepository.getQuoteCount())
+      when(() => mockQuoteRepository.getTranslations())
           .thenReturn(const Left(UnexpectedFailure(message: 'error')));
 
       // act
@@ -73,7 +84,7 @@ void main() {
       expect(responseBody['message'], equals('error'));
       expect(responseBody['code'], equals(500));
       verify(() => mockContext.read<QuoteRepository>()).called(1);
-      verify(() => mockQuoteRepository.getQuoteCount()).called(1);
+      verify(() => mockQuoteRepository.getTranslations()).called(1);
       verifyNoMoreInteractions(mockQuoteRepository);
     });
   });

@@ -79,28 +79,6 @@ void main() {
     });
   });
 
-  group('getQuoteCount', () {
-    test('should return the number of quotes', () {
-      // arrange
-      const tExpected = 10;
-      const tData = [tExpected];
-      final tRow = Row(
-        ResultSet(
-          ['COUNT(*)'],
-          ['quotes'],
-          [tData],
-        ),
-        tData,
-      );
-      when(() => mockSqliteDb.select(any())).thenReturn(tRow);
-      // act
-      final result = quoteLocalDataSource.getQuoteCount();
-      // assert
-      expect(result, tExpected);
-      verify(() => mockSqliteDb.select(any())).called(1);
-    });
-  });
-
   group('getTranslations', () {
     test('should return a list of translations', () {
       // arrange

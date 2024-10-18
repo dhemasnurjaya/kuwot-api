@@ -3,9 +3,9 @@ import 'package:kuwot_api/domain/repositories/quote_repository.dart';
 
 Response onRequest(RequestContext context) {
   final quoteRepository = context.read<QuoteRepository>();
-  final quoteCountResult = quoteRepository.getQuoteCount();
+  final quoteTranslations = quoteRepository.getTranslations();
 
-  return quoteCountResult.fold(
+  return quoteTranslations.fold(
     (failure) {
       return Response.json(
         statusCode: 500,
@@ -15,12 +15,12 @@ Response onRequest(RequestContext context) {
         },
       );
     },
-    (count) {
+    (translations) {
       return Response.json(
         body: {
           'message': 'Welcome to Kuwot API!',
-          'time': DateTime.now().toIso8601String(),
-          'quoteCount': count,
+          'time': DateTime.now().toUtc().toIso8601String(),
+          'supportedLanguages': translations,
         },
       );
     },
