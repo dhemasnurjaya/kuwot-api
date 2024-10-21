@@ -6,4 +6,7 @@ abstract class SimpleAuth {
 
   /// Check if [decryptedToken] is valid.
   bool isTokenValid(String decryptedToken);
+
+  /// Check if [issuedAt] is expired.
+  bool isTokenExpired(int issuedAt);
 }

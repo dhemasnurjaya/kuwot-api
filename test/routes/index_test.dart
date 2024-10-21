@@ -43,11 +43,13 @@ void main() {
       final responseBody =
           jsonDecode(await response.body()) as Map<String, dynamic>;
       final tExpectedSupportedTranslations = tSupportedLanguages
-          .map((e) => {
-                'id': e.id,
-                'lang': e.lang,
-                'tableName': e.tableName,
-              })
+          .map(
+            (e) => {
+              'id': e.id,
+              'lang': e.lang,
+              'tableName': e.tableName,
+            },
+          )
           .toList();
       expect(response.statusCode, equals(HttpStatus.ok));
       expect(

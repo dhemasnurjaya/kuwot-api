@@ -1,17 +1,25 @@
 import 'package:kuwot_api/core/auth/simple_auth_rsa.dart';
+import 'package:kuwot_api/core/time.dart';
 import 'package:kuwot_api/env.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 class MockEnv extends Mock implements EnvImpl {}
 
+class MockTime extends Mock implements Time {}
+
 void main() {
-  late MockEnv env;
+  late MockEnv mockEnv;
+  late MockTime mockTime;
   late SimpleAuthRSA rsaAuth;
 
   setUp(() {
-    env = MockEnv();
-    rsaAuth = SimpleAuthRSA(env: env);
+    mockEnv = MockEnv();
+    mockTime = MockTime();
+    rsaAuth = SimpleAuthRSA(
+      env: mockEnv,
+      time: mockTime,
+    );
   });
 
   test('should decrypt token with private key', () {
@@ -22,7 +30,7 @@ void main() {
         'VwG7aAQ+8cbfyHuHAJzJeq2n9bQnJ1v/OiQQfWuQvtw0voQkbCYGsT0kWI3hHmJDQ6q2v0L8Lrx4AwGzqJXNlhH/P6YGXykGabD8N/5ROWoRc5cCemP1EESyZLk531LSPEg4tFkWN1MLU/4As7Jif4nVbkfwJznDaspjb5evF6s=';
     const tDecryptedToken = '94bccf9c-7ca4-4f2d-86ce-1f9f03ebf34f';
 
-    when(() => env.authPrivateKey).thenReturn(tPrivKey);
+    when(() => mockEnv.authPrivateKey).thenReturn(tPrivKey);
 
     // act
     final decryptedToken = rsaAuth.decryptToken(tToken);
@@ -31,21 +39,79 @@ void main() {
     expect(decryptedToken, tDecryptedToken);
   });
 
-  test('should return false when token is not valid', () {
-    // arrange
-    const tToken = 'invalid-token';
-    // act
-    final isValid = rsaAuth.isTokenValid(tToken);
-    // assert
-    expect(isValid, false);
+  group('isTokenValid', () {
+    test('should return false when token is not valid', () {
+      // arrange
+      const tToken = 'invalid-token';
+      // act
+      final isValid = rsaAuth.isTokenValid(tToken);
+      // assert
+      expect(isValid, false);
+    });
+
+    test('should return true when token is valid', () {
+      // arrange
+      const tToken = '94bccf9c-7ca4-4f2d-86ce-1f9f03ebf34f';
+      // act
+      final isValid = rsaAuth.isTokenValid(tToken);
+      // assert
+      expect(isValid, true);
+    });
   });
 
-  test('should return true when token is valid', () {
-    // arrange
-    const tToken = '94bccf9c-7ca4-4f2d-86ce-1f9f03ebf34f';
-    // act
-    final isValid = rsaAuth.isTokenValid(tToken);
-    // assert
-    expect(isValid, true);
+  group('isTokenExpired', () {
+    const tIssuedAt = 1630000000;
+    const tTokenLifetimeSeconds = 300;
+    const tAllowedDriftSeconds = 10;
+
+    test('should not expired', () {
+      // arrange
+      when(() => mockTime.getUnixTimestamp()).thenReturn(tIssuedAt);
+      // act
+      final isExpired = rsaAuth.isTokenExpired(tIssuedAt);
+      // assert
+      expect(isExpired, false);
+    });
+
+    test('should not expired with positive drift', () {
+      // arrange
+      when(() => mockTime.getUnixTimestamp())
+          .thenReturn(tIssuedAt + tTokenLifetimeSeconds);
+      // act
+      final isExpired = rsaAuth.isTokenExpired(tIssuedAt);
+      // assert
+      expect(isExpired, false);
+    });
+
+    test('should not expired with negative drift', () {
+      // arrange
+      when(() => mockTime.getUnixTimestamp())
+          .thenReturn(tIssuedAt - tAllowedDriftSeconds);
+      // act
+      final isExpired = rsaAuth.isTokenExpired(tIssuedAt);
+      // assert
+      expect(isExpired, false);
+    });
+
+    test('should expired with positive drift', () {
+      // arrange
+      when(() => mockTime.getUnixTimestamp()).thenReturn(
+        tIssuedAt + tTokenLifetimeSeconds + tAllowedDriftSeconds + 1,
+      );
+      // act
+      final isExpired = rsaAuth.isTokenExpired(tIssuedAt);
+      // assert
+      expect(isExpired, true);
+    });
+
+    test('should expired with negative drift', () {
+      // arrange
+      when(() => mockTime.getUnixTimestamp())
+          .thenReturn(tIssuedAt - tAllowedDriftSeconds - 1);
+      // act
+      final isExpired = rsaAuth.isTokenExpired(tIssuedAt);
+      // assert
+      expect(isExpired, true);
+    });
   });
 }
