@@ -46,7 +46,7 @@ Handler _authCheck(Handler handler) {
         final isTokenValid = authenticator.isTokenValid(authModel.token);
         final isTokenExpired = authenticator.isTokenExpired(authModel.issuedAt);
 
-        return isTokenValid && !isTokenExpired;
+        return isTokenValid && !isTokenExpired ? true : null;
       },
       applies: (RequestContext context) async {
         return appliedRoutes.any((e) => context.request.uri.path.startsWith(e));
