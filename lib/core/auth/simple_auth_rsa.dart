@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:encrypt/encrypt.dart';
 import 'package:kuwot_api/core/auth/simple_auth.dart';
+import 'package:kuwot_api/core/time.dart';
 import 'package:kuwot_api/env.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 import 'package:uuid/validation.dart';
@@ -11,9 +12,14 @@ import 'package:uuid/validation.dart';
 /// decrypt it with private key and check if the UUID is valid.
 class SimpleAuthRSA implements SimpleAuth {
   /// Creates a new [SimpleAuthRSA] with the provided [env].
-  SimpleAuthRSA({required Env env}) : _env = env;
+  SimpleAuthRSA({
+    required Env env,
+    required Time time,
+  })  : _env = env,
+        _time = time;
 
   final Env _env;
+  final Time _time;
 
   @override
   String? decryptToken(String token) {
@@ -37,5 +43,17 @@ class SimpleAuthRSA implements SimpleAuth {
   bool isTokenValid(String decryptedToken) {
     // check if token is a valid UUID
     return UuidValidation.isValidUUID(fromString: decryptedToken);
+  }
+
+  @override
+  bool isTokenExpired(int issuedAt) {
+    const tokenLifetimeSeconds = 300;
+    const allowedDriftSeconds = 10;
+
+    final now = _time.getUnixTimestamp();
+    final diff = now - issuedAt;
+
+    return diff < -allowedDriftSeconds ||
+        diff > (tokenLifetimeSeconds + allowedDriftSeconds);
   }
 }

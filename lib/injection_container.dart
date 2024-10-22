@@ -3,6 +3,7 @@
 import 'package:kuwot_api/core/auth/simple_auth.dart';
 import 'package:kuwot_api/core/auth/simple_auth_rsa.dart';
 import 'package:kuwot_api/core/network/network.dart';
+import 'package:kuwot_api/core/time.dart';
 import 'package:kuwot_api/data/data_sources/local/quote_local_data_source.dart';
 import 'package:kuwot_api/data/data_sources/remote/unsplash_remote_data_source.dart';
 import 'package:kuwot_api/data/quote_database.dart';
@@ -24,6 +25,7 @@ class InjectionContainer {
   static final InjectionContainer _instance = InjectionContainer._internal();
 
   Env? _env;
+  Time? _time;
   Network? _network;
   SimpleAuth? _simpleAuth;
   QuoteDb? _quoteDatabase;
@@ -34,11 +36,17 @@ class InjectionContainer {
   /// [Env] instance, used for environment variables.
   Env get env => _env ??= EnvImpl();
 
+  /// [Time] instance, used for time operations.
+  Time get time => _time ??= TimeImpl();
+
   /// [Network] instance, used for network operations.
   Network get network => _network ??= NetworkImpl();
 
   /// [SimpleAuth] instance, used for authentication.
-  SimpleAuth get simpleAuth => _simpleAuth ??= SimpleAuthRSA(env: env);
+  SimpleAuth get simpleAuth => _simpleAuth ??= SimpleAuthRSA(
+        env: env,
+        time: time,
+      );
 
   /// [QuoteDb] instance, interacts with the quote SQLite database.
   QuoteDb get quoteDatabase => _quoteDatabase ??= QuoteDb();
