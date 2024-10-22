@@ -35,18 +35,27 @@ Handler _authCheck(Handler handler) {
       authenticator: (context, token) async {
         final authenticator = context.read<SimpleAuth>();
 
-        final decryptedToken = authenticator.decryptToken(token);
-        if (decryptedToken == null) {
+        try {
+          final decryptedToken = authenticator.decryptToken(token);
+          if (decryptedToken == null) {
+            throw Exception('Unable to decrypt token');
+          }
+
+          final authJson = jsonDecode(decryptedToken) as Map<String, dynamic>;
+          final authModel = AuthModel.fromJson(authJson);
+
+          final isTokenValid = authenticator.isTokenValid(authModel.token);
+          final isTokenExpired =
+              authenticator.isTokenExpired(authModel.issuedAt);
+
+          if (isTokenValid && !isTokenExpired) {
+            return true;
+          }
+
+          throw Exception('Token is invalid or expired');
+        } on Exception catch (_) {
           return null;
         }
-
-        final authJson = jsonDecode(decryptedToken) as Map<String, dynamic>;
-        final authModel = AuthModel.fromJson(authJson);
-
-        final isTokenValid = authenticator.isTokenValid(authModel.token);
-        final isTokenExpired = authenticator.isTokenExpired(authModel.issuedAt);
-
-        return isTokenValid && !isTokenExpired ? true : null;
       },
       applies: (RequestContext context) async {
         return appliedRoutes.any((e) => context.request.uri.path.startsWith(e));
